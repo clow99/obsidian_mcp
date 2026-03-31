@@ -1,0 +1,12 @@
+services:
+  obsidian-mcp:
+    build:
+      context: .
+    image: obsidian-mcp:local
+    stdin_open: true
+    tty: false
+    env_file:
+      - .env
+    volumes:
+      - ${OBSIDIAN_VAULT_HOST_PATH:-./sample-vault}:${OBSIDIAN_VAULT_PATH:-/vault}
+    command: ["node", "dist/server.js"]

@@ -1,0 +1,40 @@
+{
+  "name": "obsidian-mcp",
+  "version": "0.1.0",
+  "description": "Dockerized MCP server for safe, Obsidian-friendly vault operations.",
+  "private": true,
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/server.ts",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "validate:vault": "node scripts/validate-vault.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.cameronlow.com/cam/obsidian_mcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "obsidian",
+    "markdown"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "dotenv": "^17.3.1",
+    "gray-matter": "^4.0.3",
+    "openai": "^6.33.0",
+    "yaml": "^2.8.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
