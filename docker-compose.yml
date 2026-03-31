@@ -3,7 +3,6 @@ services:
     build:
       context: .
     image: obsidian-mcp:local
-    stdin_open: true
     tty: false
     env_file:
       - .env
