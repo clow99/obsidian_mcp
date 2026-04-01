@@ -8,7 +8,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/server.ts",
+    "dev:http": "tsx src/http-server.ts",
     "start": "node dist/server.js",
+    "start:http": "node dist/http-server.js",
     "test": "vitest run",
     "validate:vault": "node scripts/validate-vault.mjs"
   },
