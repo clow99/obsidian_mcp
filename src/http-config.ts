@@ -1,16 +1,24 @@
 export type HttpServerConfig = {
   host: string;
   port: number;
+  allowedHosts?: string[];
 };
 
 export function loadHttpServerConfig(env: NodeJS.ProcessEnv = process.env): HttpServerConfig {
   const host = parseHost(env.MCP_HTTP_HOST);
   const port = parsePort(env.MCP_HTTP_PORT);
+  const allowedHosts = parseAllowedHosts(env.MCP_HTTP_ALLOWED_HOSTS, host);
 
-  return {
+  const config: HttpServerConfig = {
     host,
     port,
   };
+
+  if (allowedHosts) {
+    config.allowedHosts = allowedHosts;
+  }
+
+  return config;
 }
 
 function parseHost(value: string | undefined): string {
@@ -30,4 +38,23 @@ function parsePort(value: string | undefined): number {
   }
 
   return parsed;
+}
+
+function parseAllowedHosts(value: string | undefined, host: string): string[] | undefined {
+  const trimmed = value?.trim();
+
+  if (trimmed) {
+    const hosts = trimmed
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+
+    return hosts.length > 0 ? [...new Set(hosts)] : undefined;
+  }
+
+  if (host !== '0.0.0.0' && host !== '::') {
+    return undefined;
+  }
+
+  return ['localhost', '127.0.0.1', 'host.docker.internal', 'obsidian-mcp', '[::1]'];
 }

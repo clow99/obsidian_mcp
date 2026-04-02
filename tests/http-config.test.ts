@@ -7,6 +7,7 @@ describe('http server config', () => {
     expect(loadHttpServerConfig({})).toEqual({
       host: '127.0.0.1',
       port: 3000,
+      allowedHosts: undefined,
     });
   });
 
@@ -19,6 +20,32 @@ describe('http server config', () => {
     ).toEqual({
       host: 'localhost',
       port: 4321,
+      allowedHosts: undefined,
+    });
+  });
+
+  it('allows Docker host access by default when binding all interfaces', () => {
+    expect(
+      loadHttpServerConfig({
+        MCP_HTTP_HOST: '0.0.0.0',
+      }),
+    ).toEqual({
+      host: '0.0.0.0',
+      port: 3000,
+      allowedHosts: ['localhost', '127.0.0.1', 'host.docker.internal', 'obsidian-mcp', '[::1]'],
+    });
+  });
+
+  it('accepts explicit allowed host overrides', () => {
+    expect(
+      loadHttpServerConfig({
+        MCP_HTTP_HOST: '0.0.0.0',
+        MCP_HTTP_ALLOWED_HOSTS: 'localhost, host.docker.internal, obsidian-mcp, localhost',
+      }),
+    ).toEqual({
+      host: '0.0.0.0',
+      port: 3000,
+      allowedHosts: ['localhost', 'host.docker.internal', 'obsidian-mcp'],
     });
   });
 

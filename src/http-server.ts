@@ -11,7 +11,15 @@ import { loadHttpServerConfig } from './http-config.js';
 async function main(): Promise<void> {
   const dependencies = createToolDependencies();
   const httpConfig = loadHttpServerConfig();
-  const app = createMcpExpressApp({ host: httpConfig.host }) as HttpApp;
+  const expressOptions: Parameters<typeof createMcpExpressApp>[0] = {
+    host: httpConfig.host,
+  };
+
+  if (httpConfig.allowedHosts) {
+    expressOptions.allowedHosts = httpConfig.allowedHosts;
+  }
+
+  const app = createMcpExpressApp(expressOptions) as HttpApp;
   const transports = new Map<string, StreamableHTTPServerTransport>();
 
   app.post('/mcp', async (req: HttpRequest, res: HttpResponse) => {
